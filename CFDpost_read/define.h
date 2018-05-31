@@ -11,10 +11,9 @@
 #include <iostream>
 #include <fstream>
 #include <time.h>
-#include <iostream>
 #include <istream>
-#include <assert.h>
 #include <sstream>
+#include <assert.h>
 #include <fstream>
 #include <algorithm>
 #include <map>
@@ -132,8 +131,8 @@ public:
     std::vector<CFD_Post_Face> pface;
 };
 
-//void split_string(std::string &chars, svector &strvec);
-//void read_CFD_Post(ssmap &commads, CFD_Post &cfdpdata);
-//void read_STL(std::string name, STL &stldata);
+void split_string(std::string &chars, svector &strvec);
+void read_CFD_Post(ssmap &commads, CFD_Post &cfdpdata);
+void write_tecplot(map<string, string>& commads, CFD_Post &cfdpdata);
 
 #endif // DEFINE_H

@@ -5,8 +5,8 @@ CONFIG -= qt
 
 SOURCES += \
         main.cpp \
-    cfd_post_face.cpp
+    cfd_post_face.cpp \
+    dataio.cpp
 
 HEADERS += \
-    define.h \
-    read_cfd_post.h
+    define.h
