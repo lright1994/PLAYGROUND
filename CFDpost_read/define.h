@@ -113,6 +113,8 @@ class CFD_Post_Face
 public:
     rvector x,y,z;
     iivector face2node;
+    vector<pair<int,int>> facelist;
+    iivector neighbor;//应当为两维 left和right
     rvector p,cp;
     rvector st;//static temperature;
 
@@ -133,6 +135,7 @@ public:
 
 void split_string(std::string &chars, svector &strvec);
 void read_CFD_Post(ssmap &commads, CFD_Post &cfdpdata);
-void write_tecplot(map<string, string>& commads, CFD_Post &cfdpdata);
+void write_tecplot(ssmap& commads, CFD_Post &cfdpdata);
+void get_neighbor(CFD_Post_Face &cfdface);
 
 #endif // DEFINE_H

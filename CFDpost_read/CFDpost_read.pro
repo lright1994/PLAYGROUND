@@ -6,7 +6,8 @@ CONFIG -= qt
 SOURCES += \
         main.cpp \
     cfd_post_face.cpp \
-    dataio.cpp
+    dataio.cpp \
+    get_neighbor.cpp
 
 HEADERS += \
     define.h
