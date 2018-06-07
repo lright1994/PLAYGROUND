@@ -171,9 +171,9 @@ void read_CFD_Post(map<string, string>& commads, CFD_Post &cfdpdata)
 
 }
 
-void write_tecplot(map<string, string>& commads, CFD_Post &cfdpdata)
+void write_tecplot(map<string, string>& commads, CFD_Post_Face &cfdface)
 {
-    std::string fileName = commads["-cfd"];
+    std::string fileName = commads["-outName"];
     printf("\n\n\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
     printf("\nWriting data to '%s'\n", fileName.c_str());
 
@@ -183,28 +183,46 @@ void write_tecplot(map<string, string>& commads, CFD_Post &cfdpdata)
     ofstream outfile(fileName.c_str());
 
     //先只考虑单一区间 XYZ + 温度数据
-    ss<<"TITLE = \""<<commads["-title"]<<"\"\n";
     ss<<"VARIABLES = \"X\", \"Y\", \"Z\", \"Temperature\"\n";
-    ss<<"ZONE N = "<<cfdpdata.pface[0].x.size()<<", E = "<<cfdpdata.pface[0].face2node.size()<<", DATAPACKING = POINT, ZONETYPE = FEBRICK\n";
-    int points_size = cfdpdata.pface[0].x.size();
-    int elements_size = cfdpdata.pface[0].face2node.size();
-    outfile<<ss.str();
-    for(size_t i = 0; i < points_size;i++)
-    {
-        outfile<<cfdpdata.pface[0].x[i]<<" "<<cfdpdata.pface[0].y[i]<<" "<<cfdpdata.pface[0].z[i]<<" "<<cfdpdata.pface[0].st[i]<<endl;
-    }
-    outfile<<endl;
+    ss<<"ZONE T = test\n";
+    ss<<"ZONETYPE=FEPOLYGON\n";
+    ss<<"Nodes="<<cfdface.x.size()<<endl;
+    ss<<"Elements="<<cfdface.face2node.size()<<endl;
+    ss<<"Faces="<<cfdface.facelist.size()<<endl;
+    ss<<"NumConnectedBoundaryFaces=0 \n"<<"TotalNumBoundaryConnections=0\n";
 
-    for(size_t i=0; i<elements_size;i++)
+    outfile<<ss.str();
+
+    int count=0;
+    outfile<<endl<<"# x data"<<endl;
+    for(auto r:cfdface.x)output_line(count,outfile,r);
+    outfile<<endl<<"# y data"<<endl;
+    count=0;
+    for(auto r:cfdface.y)output_line(count,outfile,r);
+    outfile<<endl<<"# z data"<<endl;
+    count=0;
+    for(auto r:cfdface.z)output_line(count,outfile,r);
+    outfile<<endl<<"# temperature data"<<endl;
+    count=0;
+    for(auto r:cfdface.st)output_line(count,outfile,r);
+
+    outfile<<endl<<"# face node list"<<endl;
+    count=0;
+    for(auto r:cfdface.facelist)
     {
-        int face_size=cfdpdata.pface[0].face2node[i].size();
-        for(size_t j=0; j<8;j++)
-        {
-            int num=(j+face_size)>=8? (j-8+face_size):0;
-            outfile<<cfdpdata.pface[0].face2node[i][num]+1<<" ";
-        }
-        outfile<<endl;
+        stringstream ss;
+        ss<<r.first+1<<" "<<r.second+1<<" ";
+        output_line(count,outfile,ss.str());
     }
+
+    outfile<<endl<<"# left element"<<endl;
+    count=0;
+    for(auto r:cfdface.neighbor[0])output_line(count,outfile,r+1);
+
+    outfile<<endl<<"# right element"<<endl;
+    count=0;
+    for(auto r:cfdface.neighbor[1])output_line(count,outfile,0);
+
     outfile.close();
 
 }

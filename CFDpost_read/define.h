@@ -125,6 +125,9 @@ public:
 
     double get_value_p(KPoint pnt, int fid);
     double get_value_cp(KPoint pnt, int fid);
+    void get_neighbor();
+
+
 };
 
 class CFD_Post
@@ -135,7 +138,18 @@ public:
 
 void split_string(std::string &chars, svector &strvec);
 void read_CFD_Post(ssmap &commads, CFD_Post &cfdpdata);
-void write_tecplot(ssmap& commads, CFD_Post &cfdpdata);
-void get_neighbor(CFD_Post_Face &cfdface);
+void write_tecplot(ssmap& commads, CFD_Post_Face &cfdface);
+
+template <typename Out>
+void inline output_line(int &count,ofstream& outfile,const Out&out)
+{
+    outfile<<out<<" ";
+    ++count;
+    if(count%20==0)
+    {
+        outfile<<endl;
+        count=0;
+    }
+}
 
 #endif // DEFINE_H

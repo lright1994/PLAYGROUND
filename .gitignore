@@ -36,3 +36,5 @@ CGNS/
 *.stash
 
 leetcode/
+
+*.dat
