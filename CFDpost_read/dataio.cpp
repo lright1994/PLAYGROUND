@@ -164,6 +164,12 @@ void read_CFD_Post(map<string, string>& commads, CFD_Post &cfdpdata)
         }
 
     }
+    auto max_x = std::max_element(cfdpdata.pface[0].x.begin(),cfdpdata.pface[0].x.end());
+    auto max_y = std::max_element(cfdpdata.pface[0].y.begin(),cfdpdata.pface[0].y.end());
+    auto max_z = std::max_element(cfdpdata.pface[0].z.begin(),cfdpdata.pface[0].z.end());
+    cout<<"x max: "<<*max_x<<endl
+       <<"y max: "<<*max_y<<endl
+      <<"z max: "<<*max_z<<endl;
 
     infile.close();
 
